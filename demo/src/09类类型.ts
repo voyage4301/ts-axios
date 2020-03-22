@@ -1,18 +1,33 @@
 interface ClockInterface {
-    currentTime: Date
-    setTime(d: Date): void
+    tick(): void
 }
 
 interface ClockConstructor {
-    new(hour: number, minute: number): any
+    new(hour: number, minute: number): ClockInterface
 }
 
-class Clock implements ClockInterface {
-    currentTime: Date
-    constructor(h: Date, m: number) {
-        this.currentTime = h
+function createClock(ctor: ClockConstructor, hour: number, minute: number): ClockInterface {
+    return new ctor(hour, minute)
+}
+
+class DigitalClock implements ClockInterface {
+    constructor(h: number, m: number) {
+
     }
-    setTime(d: Date) {
-        this.currentTime = d
+    tick() {
+        console.log('beep beep beep');
     }
 }
+
+class AnalogClock implements ClockInterface {
+    constructor(h: number, m: number) {
+
+    }
+    tick() {
+        console.log('tick toc');
+    }
+}
+
+let digital = createClock(DigitalClock, 12, 13)
+
+let analog = createClock(AnalogClock, 10, 10)

@@ -1,10 +1,22 @@
 "use strict";
-var Clock = /** @class */ (function () {
-    function Clock(h, m) {
-        this.currentTime = h;
+function createClock(ctor, hour, minute) {
+    return new ctor(hour, minute);
+}
+var DigitalClock = /** @class */ (function () {
+    function DigitalClock(h, m) {
     }
-    Clock.prototype.setTime = function (d) {
-        this.currentTime = d;
+    DigitalClock.prototype.tick = function () {
+        console.log('beep beep beep');
     };
-    return Clock;
+    return DigitalClock;
 }());
+var AnalogClock = /** @class */ (function () {
+    function AnalogClock(h, m) {
+    }
+    AnalogClock.prototype.tick = function () {
+        console.log('tick toc');
+    };
+    return AnalogClock;
+}());
+var digital = createClock(DigitalClock, 12, 13);
+var analog = createClock(AnalogClock, 10, 10);
