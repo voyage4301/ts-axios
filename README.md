@@ -1016,4 +1016,67 @@ function broken(name: string | null): string {
 ```
 
 # ts-axios
-## 
+## 安装
+1. 克隆 typescript library starter
+2. 安装 以下包(用于测试)
+    `webpack-hot-middleware`
+    `tslint-loader`
+    `webpack-dev-middleware`
+    `ts-loader`
+    `express`
+    `body-parser`
+    `webpack`
+## 编码
+### 入口文件 src/index.js
+```ts
+import { AxiosRequestConfig } from './types'
+import xhr from './xhr'
+
+function axios(config: AxiosRequestConfig): void {
+  xhr(config)
+}
+
+export default axios
+```
+### 类型文件夹 src/types
+#### 类型主文件 src/types/index.ts
+```ts
+export type Method = 'get'
+  | 'GET'
+  | 'post'
+  | 'POST'
+  | 'delete'
+  | 'DELETE'
+  | 'head'
+  | 'HEAD'
+  | 'options'
+  | 'OPTIONS'
+  | 'put'
+  | 'PUT'
+  | 'patch'
+  | 'PATCH'
+
+export interface AxiosRequestConfig {
+  url: string
+  method?: Method
+  data?: any
+  param?: any
+}
+```
+### 请求逻辑的文件 src/xhr.ts
+```ts
+import { AxiosRequestConfig } from './types'
+
+export default function xhr(config: AxiosRequestConfig): void {
+  const { url, data = null, method = 'get' } = config
+
+  const request = new XMLHttpRequest()
+
+  request.open(method.toUpperCase(), url, true)
+
+  request.send(data)
+}
+```
+
+#### 处理请求url参数 src/helpers/url.ts
+1. 
