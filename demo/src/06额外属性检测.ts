@@ -1,4 +1,4 @@
-interface Square {
+interface Square1 {
     color: string
     area: number
 }
@@ -9,15 +9,15 @@ interface SquareConfig {
     [propName: string]: any // 索引签名 表示 SquareConfig可以有任意数量的属性 只要不是color和width
 }
 
-function createSquare1(config: SquareConfig): Square {
-    let newSquare = { color: 'white', area: 100 }
+function createSquare1(config: SquareConfig): Square1 {
+    let newSquare1 = { color: 'white', area: 100 }
     if (config.color) {
-        newSquare.color = config.color
+        newSquare1.color = config.color
     }
     if (config.width) {
-        newSquare.area = config.width * config.width
+        newSquare1.area = config.width * config.width
     }
-    return newSquare
+    return newSquare1
 }
 
 // let mySquare1 = createSquare1({ colour: 'black' }) // 报错

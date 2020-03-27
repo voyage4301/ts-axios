@@ -1,4 +1,4 @@
-interface Square {
+interface Square2 {
     color: string
     area: number
 }
@@ -8,16 +8,30 @@ interface SquareConfig {
     width?: number
 }
 
-function createSquare(config: SquareConfig): Square {
-    let newSquare = { color: 'white', area: 100 }
+function createSquare(config: SquareConfig): Square2 {
+    let newSquare2 = { color: 'white', area: 100 }
     if (config.color) {
-        newSquare.color = config.color
+        newSquare2.color = config.color
     }
     if (config.width) {
-        newSquare.area = config.width * config.width
+        newSquare2.area = config.width * config.width
     }
-    return newSquare
+    return newSquare2
 }
 
 let mySquare = createSquare({ color: 'black' })
 console.log(mySquare);
+
+
+/* 父组件 */
+const data = function () {
+    return {
+        buttonList: [
+            {id: 'button1', value: ''},
+            
+        ]
+    }
+}
+
+
+

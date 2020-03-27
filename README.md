@@ -377,7 +377,643 @@ class Greeter {
 
 let greeter1 = new Greeter('world')
 console.log(greeter1.greet());
+/* 0---------- */
+class Animal1 {
+    move(distance: number = 0) {
+        console.log(`animal moved ${distance}m`);
+    }
+}
+
+class Dog1 extends Animal1{
+    back() {
+        console.log('Woof! Woof!')
+    }
+}
+
+const dog = new Dog1()
+dog.back()
+dog.move(20)
+/* ---------------- */
+class Animal2 {
+    name: string
+    constructor(name: string) {
+        this.name = name
+    }
+    move(distance: number = 0) {
+        console.log(`${this.name} moved ${distance}m`)
+    }
+}
+
+class Snake extends Animal2 {
+    constructor(name: string) {
+        super(name)
+    }
+    move(distance: number = 5) {
+        console.log('Slithering...');
+        super.move(distance)
+    }
+}
+
+class Horse extends Animal2 {
+    constructor(name: string) {
+        super(name)
+    }
+    move(distance: number = 50) {
+        console.log('Galloping...');
+        super.move(distance)
+    }
+}
+
+let snake = new Snake('Sammy')
+let tom: Animal2 = new Horse('Tommy')
+
+snake.move()
+tom.move()
+```
+2. 公共私有受保护等成员变量
+```ts
+/* private */
+class Animal3 {
+    private name: string
+
+    constructor(name: string) {
+        this.name = name
+    }
+
+    move(distance: number = 0) {
+        console.log(`${this.name} moved ${distance}m`);
+    }
+}
+
+class Rhino extends Animal3 {
+    constructor() {
+        super('Rhino')
+    }
+}
+
+class Employee {
+    private name: string
+    constructor(name: string) {
+        this.name = name
+    }
+}
+
+let animal = new Animal3('Goat')
+let rhino = new Rhino()
+let employee = new Employee('Bob')
+
+animal = rhino
+// animal = employee // 报错
+
+/* -----protected---- */
+class Person1 {
+    protected name: string
+
+    protected constructor(name: string) {
+        this.name = name
+    }
+}
+
+class Employee1 extends Person1 {
+    private department: string
+
+    constructor(name: string, department: string) {
+        super(name)
+        this.department = department
+    }
+
+    getElevatorPitch(){
+        return `Hello, my name is ${this.name} and I work in ${this.department}`
+    }
+}
+
+let emp = new Employee1('Jack', '百度')
+console.log(emp.getElevatorPitch());
+// console.log(emp.name); // 报错 属性“name”受保护，只能在类“Person1”及其子类中访问
+
+// let p = new Person1('张三') // 报错 类“Person1”的构造函数是受保护的，仅可在类声明中访问。
+```
+3. readonly 修饰符
+```ts
+class Person2 {
+    readonly name: string
+    constructor(name: string) { 
+        this.name = name
+    }
+}
+
+class Person3 {
+    constructor(readonly name: string) { // 参数属性
+    }
+}
+
+let john = new Person2('John')
+// john.name = '123' // Cannot assign to 'name' because it is a read-only property
+
+let jack = new Person3('Jack')
+console.log(jack.name);
+// jack.name = 'ack' // Cannot assign to 'name' because it is a read-only property
+```
+4. 类的存取器
+```ts
+let pws = 'pws1234'
+
+class Employee4 {
+    private _fullName: string = ''
+    get fullName(): string {
+        return this._fullName
+    }
+    set fullName(newName: string) {
+        if (pws && pws === 'pws134') {
+            this._fullName = newName
+        } else {
+            console.error('Error Unauthorized update of employee!')
+        }
+    }
+}
+
+let employee1 = new Employee4()
+employee1.fullName = 'Bob Smith'
+
+if(employee1.fullName) {
+    console.log(employee1.fullName );
+}
+```
+5. 类的静态成员
+```ts
+class Grid {
+    static origin = { x: 0, y: 0 }
+    scale: number
+    constructor(scale: number) {
+        this.scale = scale
+    }
+
+    getDistance(point: { x: number, y: number }) {
+        let xD = point.x - Grid.origin.x
+        let yD = point.y - Grid.origin.y
+
+        return Math.sqrt(xD * xD + yD * yD) * this.scale
+    }
+}
+
+let grid1 = new Grid(1)
+let grid2 = new Grid(5)
+
+console.log(grid1.getDistance({ x: 3, y: 4 }));
+console.log(grid2.getDistance({ x: 3, y: 4 }));
+```
+6. 抽象类
+```ts
+abstract class Department {
+    name: string
+    constructor(name: string) {
+        this.name = name
+    }
+    printName(): void {
+        console.log(`department name ${this.name}`);
+    }
+    abstract printMeeting(): void
+}
+
+class AccountDepartment extends Department {
+    constructor() {
+        super('Account ad Auditing')
+    }
+    printMeeting(): void {
+        console.log('the accounting department meets each Monday');
+    }
+    genterateReports(): void {
+        console.log('本地方法');
+    }
+}
+
+// let department: Department = new Department('123') // 无法创建抽象类的实例。
+let department: Department = new AccountDepartment() // 可以创建派生类的实例
+department.printName()
+department.printMeeting()
+// department.genterateReports() // Department 中没有注册 genterateReports 故报错
+```
+7. 类的高级技巧
+```ts
+class Person5 {
+    static localname = 'Jack Jones'
+    name: string
+    constructor(name?: string) {
+        this.name = name || ''
+    }
+    sayHello() {
+        if (this.name) {
+            return `hello my name is ${this.name}`
+        } else {
+            return `hello my name is ${Person5.localname}`
+        }
+    }
+}
+
+let p: Person5 = new Person5()
+console.log(p.sayHello());
+
+let PersonMaker: typeof Person5 = Person5 
+PersonMaker.localname = '张三'
+
+let p2: Person5 = new PersonMaker()
+console.log(p2.sayHello());
+```
+
+# 函数
+1. 基本概念
+```ts
+function add(x: number, y: number): number {
+    return x + y
+}
+
+let myAdd: (x: number, y: number) => number = function (x: number, y: number): number {
+    return x + y
+} 
+```
+2. 可选参数
+```ts
+function fullName(firstName: string, lastName?: string): string {
+    if (lastName) {
+        return firstName + '' + lastName
+    } else {
+        return firstName
+    }
+}
+
+let res1 = fullName('BOB') //报错 An argument for 'lastName' was not provided.
+let res2 = fullName('BOB', 'KK', 'DD') //报错 应有 2 个参数，但获得 3 个。
+let res3 = fullName('BOB', 'KK') 
+/* ----------------- */
+function fullName(firstName: string, ...restOfName: string[]): string {
+    return firstName + ''
+
+}
+
+let res1 = fullName('BOB')
+let res2 = fullName('BOB', 'KK', 'DD')
+let res3 = fullName('BOB', 'KK') 
+```
+3. 函数的this和重载
+```ts
+interface Card {
+    suit: string
+    card: number
+}
+interface Deck {
+    suits: string[]
+    cards: number[]
+    createCardPicker(this: Deck): () => Card
+}
+
+let deck = {
+    suits: ['hearts', 'spandes', 'clubs', 'diamonds'],
+    cards: Array(52),
+    createCardPicker(this: Deck) {
+        return () => {
+            let pickedCard = Math.floor(Math.random() * 52)
+            let pickedSuit = Math.floor(pickedCard / 13)
+            return {
+                suit: this.suits[pickedSuit],
+                card: pickedCard % 13
+            }
+        }
+    }
+}
+
+let cardPicker = deck.createCardPicker()
+let pickedCard = cardPicker()
+
+console.log('card: ' + pickedCard.card + 'of' + pickedCard.suit);
+```
+```ts
+interface UIElement {
+    addClickListener(onClick: (this: void, e: Event) => void): void
+}
+
+class Handler {
+    type: string = ''
+    onClickBad = (e: Event) => { // 箭头函数
+        this.type = e.type
+    }
+}
+
+let h = new Handler()
+
+let uiElement: UIElement = {
+    addClickListener() {
+
+    }
+}
+
+uiElement.addClickListener(h.onClickBad)
+```
+
+# 泛型
+1. 基础示例
+```ts
+function identity<T>(arg: T): T {
+    return arg
+}
+
+// let outPut = identity<string>('mystring')
+let outPut = identity('mystring')
+```
+```ts
+function identity<T>(arg: T[]): T[] {
+    console.log(arg.length);
+    return arg
+}
+
+// let outPut = identity<string>('mystring')
+let outPut = identity(['mystring'])
+```
+```ts
+function identity<T>(arg: T): T {
+    return arg
+}
+// let myIdentity: <T>(arg: T) => T = identity
+
+/* interface GnericIdentityFn {
+    <T>(arg: T): T
+} 
+
+let myIdentity: GnericIdentityFn = identity
+*/
+
+interface GnericIdentityFn<T> {
+    (arg: T): T
+}
+
+let myIdentity: GnericIdentityFn<number> = identity
+```
+2. 泛型类
+```ts
+class GenericNumber<T> {
+    zeroValue: T
+    add: (x: T, y: T) => T
+}
+
+let myGenericNumber = new GenericNumber<number>()
+myGenericNumber.zeroValue = 0
+myGenericNumber.add = function (x, y) {
+    return x + y
+}
+
+let stringNumber = new GenericNumber<string>()
+stringNumber.zeroValue = '123'
+stringNumber.add = function (x, y) {
+    return x + y
+}
+
+console.log(stringNumber.add(stringNumber.zeroValue, 'test'));
+```
+3. 泛型约束
+```ts
+interface Lengthwise {
+    length: number
+}
 
 
+function loggingIdentity<T extends Lengthwise>(arg: T): T {
+    console.log(arg.length);
+    return arg
+}
+
+loggingIdentity([123])
+
+function getProperty<T, K extends keyof T>(obj: T, key: K) {
+    return obj[key]
+}
+let x1 = { a: 1, b: 2, c: 3 }
+getProperty(x1, 'a') // 没问题
+// getProperty(x1, 'd') // 报错了 // 类型“"d"”的参数不能赋给类型“"a" | "b" | "c"”的参数。
+/* ----------- */
+function create<T>(c: { new(): T }): T {
+    return new c()
+}
+```
+```ts
+class Beekeeper {
+    hasMask?: boolean
+}
+class LionKeeper {
+    nametag?: string
+}
+class Animal8 {
+    numLengs?: number
+}
+class Bee extends Animal8 {
+    keeper?: Beekeeper
+}
+class Lion extends Animal8 {
+    keeper?: LionKeeper
+}
+
+function createInstance<T extends Animal8>(c: new () => T): T {
+    return new c()
+}
+
+createInstance(Lion).keeper?.nametag
+createInstance(Bee).keeper?.hasMask
+```
+4. 类型推断
+```ts
+let xxx = [0, 1, null]
+
+class Animals {
+    numLegs?: number
+}
+
+class Bees extends Animals {
+
+}
+
+class Lions extends Animals {
+
+}
+
+let zoo: Animals[] = [new Bees(), new Lions()]
+```
+
+# 高级类型
+1. 交叉类型
+```ts
+function extend<T, U>(first: T, second: U): T & U {
+    let res = {} as T & U
+    for (let id in first) {
+        res[id] = first[id] as any
+    }
+    for (let id in second) {
+        if (!res.hasOwnProperty(id)) {
+            res[id] = second[id] as any
+        }
+    }
+    return res
+}
+
+class Person {
+    constructor(public name: string) {
+
+    }
+}
+interface Loggable {
+    log(): void
+}
+class ConsoleLogger implements Loggable {
+    log() {
+
+    }
+}
+
+let jim = extend(new Person('jim'), new ConsoleLogger())
+jim.name
+jim.log()
+```
+2. 联合类型
+```ts
+function padLeft(value: string, padding: string | number) {
+    if (typeof padding === 'number') {
+        return Array(padding + 1).join(' ') + value
+    }
+    if (typeof padding === 'string') {
+        return padding + value
+    }
+    return new Error(`Expected string or number got ${padding}`)
+}
+
+// padLeft('hello world', true) // 类型“true”的参数不能赋给类型“string | number”的参数
+
+/* ---------------------------------------- */
+
+interface Brids {
+    fly(): void
+    layEggs(): void
+}
+interface Fishs {
+    swim(): void
+    layEggs(): void
+}
+
+function getSmallPet(): Fishs | Brids {
+    // return 
+}
+
+let pet = getSmallPet()
+pet.layEggs()
+// pet.fly() // 类型“Fishs”上不存在属性“fly”。
+// pet.swim() // 类型“Brids”上不存在属性“swim”。
+```
+3. 类型保护
+- 类型位词(自定义)
+```ts
+interface Brids1 {
+    fly(): void
+    layEggs(): void
+}
+interface Fishs1 {
+    swim(): void
+    layEggs(): void
+}
+
+function getSmallPet(): Fishs1 | Brids1 {
+    // return 
+}
+
+let pet1 = getSmallPet()
+pet1.layEggs()
+if (isFish(pet1)) {
+    pet1.swim()
+} else {
+    pet1.fly()
+}
+
+function isFish(pet: Fishs1 | Brids1): pet is Fishs1 {
+    return (pet as Fishs1).swim != undefined
+}
+```
+- typeof
+```ts
+function isNumber(x: any): x is number {
+    return typeof x === 'number'
+}
+
+function isString(x: any): x is string {
+    return typeof x === 'string'
+}
+
+function padLeft(value: string, padding: string | number) {
+    if (isNumber(padding)) {
+        return Array(padding + 1).join(' ') + value
+    }
+    if (isString(padding)) {
+        return padding + value
+    }
+    throw new Error(`Expected string or number, got ${padding}`)
+}
+```
+- instanceof
+```ts
+class Chicken {
+    run() { }
+    layEggs() { }
+}
+class Snakes {
+    hua() { }
+    layEggs() { }
+}
+
+function getRandomPet(): Chicken | Snakes {
+    return Math.random() > .5 ? new Chicken() : new Snakes()
+}
+
+let pt = getRandomPet()
+if (pt instanceof Chicken) {
+    pt.run()
+}
+if(pt instanceof Snakes) {
+    pt.hua()
+}
+```
+4. 可以为null的类型
+```ts
+function f(x: number, y?: number) {
+    return x + (y || 0)
+}
+
+f(1, 2)
+f(1)
+f(1, undefined)
+// f(1, null) // 类型“null”的参数不能赋给类型“number | undefined”的参数
+/* -------------- */
+class C {
+    a: number = 0
+    b?: number
+}
+
+let cc = new C()
+cc.a = 12
+// cc.a = undefined // 不能将类型“undefined”分配给类型“number”。
+cc.b = undefined
+// cc.b = null // 不能将类型“null”分配给类型“number | undefined”
+
+/* ------------- */
+function fx(sn: string | null): string {
+    return sn! || 'default'
+}
+/* ------------- */
+function broken(name: string | null): string {
+    function postfix(epither: string) {
+        return name!.charAt(0) + '. the' + epither // ! 表示肯定
+    }
+    name = name || 'Bob'
+    return postfix(name)
+}
+```
+5. 字符串字面量类型
+```ts
 
 ```
+
+# ts-axios
+## 

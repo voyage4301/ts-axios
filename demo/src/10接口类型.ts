@@ -10,7 +10,7 @@ interface Square extends Shape, PenStroke {
     sideLength: number
 }
 
-let square = {} as Square
-square.color = 'blue'
-square.sideLength = 10
-square.penWidth = 5
+let square3 = {} as Square
+square3.color = 'blue'
+square3.sideLength = 10
+square3.penWidth = 5

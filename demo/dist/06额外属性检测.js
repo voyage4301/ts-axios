@@ -1,13 +1,13 @@
 "use strict";
 function createSquare1(config) {
-    var newSquare = { color: 'white', area: 100 };
+    var newSquare1 = { color: 'white', area: 100 };
     if (config.color) {
-        newSquare.color = config.color;
+        newSquare1.color = config.color;
     }
     if (config.width) {
-        newSquare.area = config.width * config.width;
+        newSquare1.area = config.width * config.width;
     }
-    return newSquare;
+    return newSquare1;
 }
 // let mySquare1 = createSquare1({ colour: 'black' }) // 报错
 // let mySquare1 = createSquare1({ colour: 'black' } as SquareConfig)  // 通过类型断言解决, 不推荐

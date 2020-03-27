@@ -1,5 +1,5 @@
 "use strict";
-var square = {};
-square.color = 'blue';
-square.sideLength = 10;
-square.penWidth = 5;
+var square3 = {};
+square3.color = 'blue';
+square3.sideLength = 10;
+square3.penWidth = 5;
