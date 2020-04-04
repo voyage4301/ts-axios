@@ -21,6 +21,7 @@ app.use(wbepackHotMiddleware(compiler))
 app.use(express.static(__dirname))
 
 app.use(bodyParser.json())
+// app.use(bodyParser.text())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 const router = express.Router()
@@ -30,7 +31,7 @@ registerBaseRouter()
 registerErrorRouter()
 registerExtendRouter()
 registerInterceptorRouter()
-
+registerConfigRouter()
 
 
 
@@ -139,5 +140,13 @@ function registerExtendRouter() {
 function registerInterceptorRouter() {
     router.get('/interceptor/get', function (req, res) {
         res.end('hello')
+    })
+}
+
+function registerConfigRouter() {
+    router.post('/config/post', function (req, res) {
+        console.log(req.body);
+        
+        res.json(req.body)
     })
 }
